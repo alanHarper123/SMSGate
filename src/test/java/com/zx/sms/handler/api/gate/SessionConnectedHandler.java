@@ -61,14 +61,14 @@ public abstract class SessionConnectedHandler extends AbstractBusinessHandler {
 
 				@Override
 				public Boolean call() throws Exception {
-					int cnt = RandomUtils.nextInt() & 0x4fff;
+					int cnt = totleCnt.get();
 					Promise<BaseMessage> frefuture = null;
 					while (cnt > 0 && tmptotal.get() > 0) {
 						List<Promise<BaseMessage>> futures = null;
 						ChannelFuture chfuture = null;
 						BaseMessage msg = createTestReq(UUID.randomUUID().toString());
-//						chfuture = ChannelUtil.asyncWriteToEntity(getEndpointEntity().getId(), msg);
-						futures = ChannelUtil.syncWriteLongMsgToEntity(getEndpointEntity().getId(), msg);
+						chfuture = ChannelUtil.asyncWriteToEntity(getEndpointEntity().getId(), msg);
+//						futures = ChannelUtil.syncWriteLongMsgToEntity(getEndpointEntity().getId(), msg);
 						
 //						chfuture = ctx.writeAndFlush(msg);
 						
@@ -119,15 +119,15 @@ public abstract class SessionConnectedHandler extends AbstractBusinessHandler {
 					if (future.cause() != null)
 						future.cause().printStackTrace();
 
-					boolean over = ch.isActive() && tmptotal.get() > 0;
-					if (!over) {
+					boolean over = !(ch.isActive() && tmptotal.get() > 0);
+					if (over) {
 						logger.info("========send over.============");
-
+						
 						// ch.writeAndFlush(new CmppTerminateRequestMessage());
 					}
-					return over;
+					return !over;
 				}
-			}, 1);
+			}, 0);
 
 		}
 

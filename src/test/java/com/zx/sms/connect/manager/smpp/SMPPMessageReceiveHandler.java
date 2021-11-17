@@ -74,11 +74,13 @@ public class SMPPMessageReceiveHandler extends MessageReceiveHandler {
 				report.setText(((SubmitSm) msg).getMsgContent());
 				report.setSubmit_date(DateFormatUtils.format(new Date(), "yyMMddHHmm"));
 				report.setDone_date(DateFormatUtils.format(new Date(), "yyMMddHHmm"));
-				try {
-					ChannelUtil.syncWriteLongMsgToEntity(getEndpointEntity(), report);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				ctx.writeAndFlush(report);
+//				try {
+//
+//					ChannelUtil.syncWriteLongMsgToEntity(getEndpointEntity(), report);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 			return future;
 		}

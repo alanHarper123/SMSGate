@@ -1,8 +1,8 @@
 package com.zx.sms.connect.manager.smpp;
 
 import com.zx.sms.codec.smpp.Address;
+import com.zx.sms.codec.smpp.SmppConstants;
 import com.zx.sms.connect.manager.EndpointEntity;
-import com.zx.sms.connect.manager.EndpointEntity.ChannelType;
 
 public abstract class SMPPEndpointEntity extends EndpointEntity {
     /**
@@ -12,7 +12,7 @@ public abstract class SMPPEndpointEntity extends EndpointEntity {
 	private String systemId;
     private String password;
     private String systemType;
-    private byte interfaceVersion;  // interface version requested by us or them
+    private byte interfaceVersion = SmppConstants.VERSION_3_4;  // interface version requested by us or them
     private Address addressRange;
     
 	public String getSystemId() {

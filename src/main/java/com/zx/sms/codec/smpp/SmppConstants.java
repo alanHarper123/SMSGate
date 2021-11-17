@@ -295,6 +295,13 @@ public class SmppConstants {
     public static final byte STATE_UNKNOWN = (byte) 0x07;
     public static final byte STATE_REJECTED = (byte) 0x08;
 
+    public static final String MSG_DELIVERED =		"DELIVRD";
+    public static final String MSG_EXPIRED = 		"EXPIRED";
+    public static final String MSG_DELETED = 		"DELETED";
+    public static final String MSG_UNDELIVERABLE = 	"UNDELIV";
+    public static final String MSG_ACCEPTED = 		"ACCEPTD";
+    public static final String MSG_UNKNOWN = 		"UNKNOWN";
+    public static final String MSG_REJECTED = 		"REJECTD";
     //
     // SMPP TON
     //

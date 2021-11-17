@@ -1,7 +1,10 @@
 package com.zx.sms.connect.manager.tcp;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -17,10 +20,11 @@ public class TestTcpEndPoint {
 	@Test
 	public void testEchoTcpEndpoint() throws Exception
 	{
-		int port = 7890;
+		int port = 1085;
 		final EndpointManager manager = EndpointManager.INS;
 		final EndpointEntity server = new TCPServerEndpointEntity(port);
 		server.setId("svrID");
+		server.setHost("127.0.0.1");
 		EndpointEntity client = new TCPClientEndpointEntity("127.0.0.1",port);
 		client.setId("tcpid");
 		client.setMaxChannels((short)2);

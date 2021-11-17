@@ -29,8 +29,8 @@ public enum EventLoopGroupFactory {
 			
 		}
 	};
-	private  final static EventLoopGroup bossGroup = new NioEventLoopGroup(1, newThreadFactory("bossGroup"));
-	private  final static EventLoopGroup workgroup = new NioEventLoopGroup(0, newThreadFactory("workGroup"));
+	private  final static EventLoopGroup bossGroup = new NioEventLoopGroup(2, newThreadFactory("bossGroup"));
+	private  final static EventLoopGroup workgroup = new NioEventLoopGroup(2, newThreadFactory("workGroup"));
 	/**
 解决Netty-EventLoopGroup无法submit阻塞任务的问题。
 netty的特性：

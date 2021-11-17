@@ -37,7 +37,7 @@ public class TCPServerEndpointEntity extends EndpointEntity implements ServerEnd
 
 	@Override
 	protected <T extends EndpointConnector<EndpointEntity>> T buildConnector() {
-		return null;
+		return (T) new TCPServerEndpointConnector(this);
 	}
 
 	@Override

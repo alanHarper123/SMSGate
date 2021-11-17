@@ -32,5 +32,12 @@ public class SubmitSmResp extends BaseSmResp {
 	public SubmitSmResp() {
         super(SmppConstants.CMD_ID_SUBMIT_SM_RESP, "submit_sm_resp");
     }
+    @Override
+    public int calculateByteSizeOfBody() {
+
+        if(this.getCommandStatus()==0)
+        	return super.calculateByteSizeOfBody();
+        return 0;
+    }
     
 }

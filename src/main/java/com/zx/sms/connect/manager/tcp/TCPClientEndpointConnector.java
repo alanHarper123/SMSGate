@@ -7,6 +7,8 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.HttpClientCodec;
+import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
@@ -88,7 +90,9 @@ public class TCPClientEndpointConnector extends AbstractEndpointConnector  {
 	@Override
 	protected void doinitPipeLine(ChannelPipeline pipeline) {
 		 pipeline.addLast("clientLog", new LoggingHandler(LogLevel.DEBUG));
-		 pipeline.addLast("Echo",  new TCPServerEchoHandler());
+//		 pipeline.addLast("Echo",  new TCPServerEchoHandler());
+		 pipeline.addLast(new HttpClientCodec());
+		 pipeline.addLast(new HttpObjectAggregator(Integer.MAX_VALUE));
 	}
 
 	@Override

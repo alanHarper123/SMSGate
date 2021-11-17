@@ -9,18 +9,17 @@ import com.zx.sms.codec.smpp.SmppInvalidArgumentException;
 
 public class DeliverSmReceipt extends DeliverSm {
 	private static final Logger logger = LoggerFactory.getLogger(DeliverSmReceipt.class);
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4411244865862324858L;
 	private String id;
-	private String sub;
-	private String dlvrd;
+	private String sub = "001";
+	private String dlvrd = "001";
 	private String submit_date;
 	private String done_date;
 	private String stat;
-	private String err;
+	private String err = "000";
 	private String text;
 	
 	public String getId() {

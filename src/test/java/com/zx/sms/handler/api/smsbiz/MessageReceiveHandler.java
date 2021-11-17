@@ -47,7 +47,7 @@ public abstract class MessageReceiveHandler extends AbstractBusinessHandler {
 						EndpointConnector conn = getEndpointEntity().getSingletonConnector();
 						
 						logger.info("channels : {},Totle Receive Msg Num:{},   speed : {}/s",
-								conn == null ? 0 : conn.getConnectionNum(), nowcnt, (nowcnt - lastNum) / rate);
+								conn == null ? 0 : conn.getConnectionNum(), nowcnt, (double)(nowcnt - lastNum) / rate);
 						lastNum = nowcnt;
 						return true;
 				}

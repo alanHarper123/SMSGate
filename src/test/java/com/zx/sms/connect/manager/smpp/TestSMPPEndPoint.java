@@ -45,7 +45,7 @@ public class TestSMPPEndPoint {
 
 		child.setValid(true);
 		child.setChannelType(ChannelType.DUPLEX);
-		child.setMaxChannels((short)3);
+		child.setMaxChannels((short)1);
 		child.setRetryWaitTimeSec((short)30);
 		child.setMaxRetryCnt((short)3);
 		child.setReSendFailMsg(false);
@@ -65,7 +65,7 @@ public class TestSMPPEndPoint {
 		client.setPassword("ICP");
 		client.setChannelType(ChannelType.DUPLEX);
 
-		client.setMaxChannels((short)12);
+		client.setMaxChannels((short)1);
 		client.setRetryWaitTimeSec((short)100);
 		client.setUseSSL(false);
 		client.setReSendFailMsg(false);
@@ -73,7 +73,7 @@ public class TestSMPPEndPoint {
 //		client.setReadLimit(200);
 		client.setSupportLongmsg(SupportLongMessage.SEND);  //接收长短信时不自动合并
 		List<BusinessHandlerInterface> clienthandlers = new ArrayList<BusinessHandlerInterface>();
-		clienthandlers.add( new SMPPSessionConnectedHandler(1)); 
+		clienthandlers.add( new SMPPSessionConnectedHandler(100)); 
 		client.setBusinessHandlerSet(clienthandlers);
 		
 		manager.addEndpointEntity(server);

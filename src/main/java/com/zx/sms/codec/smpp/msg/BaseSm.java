@@ -2,7 +2,6 @@ package com.zx.sms.codec.smpp.msg;
 
 import org.marre.sms.SmppSmsDcs;
 import org.marre.sms.SmsAlphabet;
-import org.marre.sms.SmsDcs;
 import org.marre.sms.SmsMessage;
 import org.marre.sms.SmsMsgClass;
 import org.marre.sms.SmsPduUtil;
@@ -14,7 +13,6 @@ import com.zx.sms.codec.smpp.Address;
 import com.zx.sms.codec.smpp.RecoverablePduException;
 import com.zx.sms.codec.smpp.SmppInvalidArgumentException;
 import com.zx.sms.codec.smpp.UnrecoverablePduException;
-import com.zx.sms.common.GlobalConstance;
 import com.zx.sms.common.util.ByteBufUtil;
 import com.zx.sms.common.util.DefaultSequenceNumberUtil;
 import com.zx.sms.common.util.HexUtil;
@@ -253,7 +251,8 @@ public abstract class BaseSm<R extends PduResponse> extends PduRequest<R> {
 		bodyLength += PduUtil.calculateByteSizeOfNullTerminatedString(this.validityPeriod);
 		bodyLength += 5; // regDelivery, replace, dataCoding, defaultMsgId,
 							// messageLength bytes
-		bodyLength += getShortMessage().length;
+		if(this.shortMessage!=null)
+			bodyLength += getShortMessage().length;
 		return bodyLength;
 	}
 

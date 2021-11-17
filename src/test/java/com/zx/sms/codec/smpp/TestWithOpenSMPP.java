@@ -44,7 +44,7 @@ public class TestWithOpenSMPP {
 	
 	@Before
 	public void  chooseport() {
-		port = getAvailablePort();
+		port = 2776;
 	}
 	
     private static int getAvailablePort() {
@@ -71,7 +71,7 @@ public class TestWithOpenSMPP {
 		SMPPServerEndpointEntity server = new SMPPServerEndpointEntity();
 		server.setId("sms-core-smppserver");
 		server.setHost("127.0.0.1");
-		server.setPort(port);
+		server.setPort(2776);
 		server.setValid(true);
 		// 使用ssl加密数据流
 		server.setUseSSL(false);

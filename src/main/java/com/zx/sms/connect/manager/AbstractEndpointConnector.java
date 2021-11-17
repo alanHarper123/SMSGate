@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import com.zx.sms.common.GlobalConstance;
 import com.zx.sms.common.NotSupportedException;
 import com.zx.sms.common.storedMap.BDBStoredMapFactoryImpl;
 import com.zx.sms.common.storedMap.VersionObject;
-import com.zx.sms.common.util.DefaultSequenceNumberUtil;
 import com.zx.sms.connect.manager.cmpp.CMPPServerEndpointEntity;
 import com.zx.sms.handler.MessageLogHandler;
 import com.zx.sms.handler.api.AbstractBusinessHandler;
@@ -208,16 +206,20 @@ public abstract class AbstractEndpointConnector implements EndpointConnector<End
 
 			logger.info("Channel added To Endpoint {} .totalCnt:{} ,remoteAddress: {}", endpoint, nowConnCnt + 1, ch.remoteAddress());
 
-			if (nowConnCnt == 0 && endpoint.isReSendFailMsg()) {
-				// 如果是第一个连接。要把上次发送失败的消息取出，再次发送一次
-				ch.pipeline().addAfter(GlobalConstance.codecName, sessionHandler, createSessionManager(endpoint, storedMap, true));
-			} else {
-				ch.pipeline().addAfter(GlobalConstance.codecName, sessionHandler, createSessionManager(endpoint, storedMap, false));
-			}
+//			if (nowConnCnt == 0 && endpoint.isReSendFailMsg()) {
+//				// 如果是第一个连接。要把上次发送失败的消息取出，再次发送一次
+//				ch.pipeline().addLast(sessionHandler, createSessionManager(endpoint, storedMap, true));
+//			} else {
+//				ChannelHandler ds = createSessionManager(endpoint, storedMap, false);
+//				if(ds==null) {
+//					System.out.println("afhalghahslghksghskdgh");
+//				}
+//				ch.pipeline().addLast(sessionHandler, createSessionManager(endpoint, storedMap, false));
+//			}
 
 			// 增加流量整形 ，每个连接每秒发送，接收消息数不超过配置的值
-			ch.pipeline().addAfter(GlobalConstance.codecName, "ChannelTrafficAfter",
-					new MessageChannelTrafficShapingHandler(endpoint.getWriteLimit(), endpoint.getReadLimit(), 250));
+//			ch.pipeline().addLast( "ChannelTrafficAfter",
+//					new MessageChannelTrafficShapingHandler(endpoint.getWriteLimit(), endpoint.getReadLimit(), 250));
 
 			bindHandler(ch.pipeline(), getEndpointEntity());
 			
@@ -256,7 +258,7 @@ public abstract class AbstractEndpointConnector implements EndpointConnector<End
 		// 调用子类的bind方法
 		doBindHandler(pipe, entity);
 
-		pipe.addAfter(GlobalConstance.codecName, "msgLog", new MessageLogHandler(entity));
+		pipe.addLast( "msgLog", new MessageLogHandler(entity));
 
 		List<BusinessHandlerInterface> handlers = entity.getBusinessHandlerSet();
 		if (handlers != null && handlers.size() > 0) {
@@ -289,7 +291,7 @@ public abstract class AbstractEndpointConnector implements EndpointConnector<End
 			}
 		}
 		// 黑洞处理，丢弃所有消息
-		pipe.addLast("BlackHole", GlobalConstance.blackhole);
+//		pipe.addLast("BlackHole", GlobalConstance.blackhole);
 
 	}
 
@@ -417,6 +419,7 @@ public abstract class AbstractEndpointConnector implements EndpointConnector<End
 		if (ch == null)
 			return null;
 		AbstractSessionStateManager session = (AbstractSessionStateManager) ch.pipeline().get(sessionHandler);
+		System.out.println(session==null);
 		return session.writeMessagesync(message);
 	}
 

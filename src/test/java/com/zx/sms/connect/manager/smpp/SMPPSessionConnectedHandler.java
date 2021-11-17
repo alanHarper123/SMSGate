@@ -8,8 +8,6 @@ import org.marre.sms.SmsMsgClass;
 import org.marre.sms.SmsTextMessage;
 
 import com.zx.sms.BaseMessage;
-import com.zx.sms.codec.cmpp.msg.CmppDeliverRequestMessage;
-import com.zx.sms.codec.cmpp.msg.CmppDeliverResponseMessage;
 import com.zx.sms.codec.smpp.Address;
 import com.zx.sms.codec.smpp.msg.DeliverSm;
 import com.zx.sms.codec.smpp.msg.DeliverSmReceipt;
@@ -29,7 +27,7 @@ public class SMPPSessionConnectedHandler extends SessionConnectedHandler {
 	@Override
 	protected BaseMessage createTestReq(String str) {
 		final EndpointEntity finalentity = getEndpointEntity();
-		String content = "£$¥èéùì@";
+		String content = "The format of the SMPP bind_receiver_resp PDU is defined in the following table";
 		if (finalentity instanceof ServerEndpoint) {
 			DeliverSm pdu = new DeliverSm();
 	        pdu.setSourceAddress(new Address((byte)0,(byte)0,"13800138000"));
@@ -38,14 +36,15 @@ public class SMPPSessionConnectedHandler extends SessionConnectedHandler {
 			return pdu;
 		} else {
 			SubmitSm pdu = new SubmitSm();
-			pdu.setRegisteredDelivery((byte)0);
+			pdu.setRegisteredDelivery((byte)1);
 	        pdu.setSourceAddress(new Address((byte)0,(byte)0,"10086"));
 	        pdu.setDestAddress(new Address((byte)0,(byte)0,"13800138000"));
 	        pdu.setSmsMsg(new SmsTextMessage(content,SmsDcs.getGeneralDataCodingDcs(SmsAlphabet.GSM,SmsMsgClass.CLASS_UNKNOWN)));
+	        
 			return pdu;
 		}
 	}
-	
+	@Override
 	public void channelRead(final ChannelHandlerContext ctx, Object msg) throws Exception {
 
 		if (msg instanceof DeliverSmReceipt) {

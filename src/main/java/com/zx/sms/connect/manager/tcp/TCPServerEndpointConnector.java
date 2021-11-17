@@ -1,17 +1,5 @@
 package com.zx.sms.connect.manager.tcp;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.ssl.SslContext;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.SelfSignedCertificate;
-
 import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.Logger;
@@ -22,6 +10,20 @@ import com.zx.sms.connect.manager.EndpointEntity;
 import com.zx.sms.connect.manager.EventLoopGroupFactory;
 import com.zx.sms.connect.manager.ServerEndpoint;
 import com.zx.sms.session.AbstractSessionStateManager;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelDuplexHandler;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 public class TCPServerEndpointConnector extends AbstractEndpointConnector {
 	private static final Logger logger = LoggerFactory.getLogger(TCPServerEndpointConnector.class);
@@ -35,7 +37,6 @@ public class TCPServerEndpointConnector extends AbstractEndpointConnector {
 				.channel(NioServerSocketChannel.class)
 				.option(ChannelOption.SO_BACKLOG, 100)
 				.option(ChannelOption.SO_RCVBUF, 2048)
-				.option(ChannelOption.SO_SNDBUF, 2048)
 				.childOption(ChannelOption.TCP_NODELAY, true)
 //				.handler(new LoggingHandler(LogLevel.INFO))
 				.childHandler(initPipeLine());
@@ -115,7 +116,7 @@ public class TCPServerEndpointConnector extends AbstractEndpointConnector {
 	@Override
 	protected void doinitPipeLine(ChannelPipeline pipeline) {
 		pipeline.addLast("channelcollector", new ChannelCollector());
-		pipeline.addLast("Echo", new TCPServerEchoHandler());
+		pipeline.addLast(new HttpServerCodec(),new HttpObjectAggregator(Integer.MAX_VALUE));
 	}
 
 	@Override
